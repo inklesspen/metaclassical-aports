@@ -1,0 +1,23 @@
+# Contributor: Rose Davidson <rose@metaclassical.com>
+# Maintainer: Rose Davidson <rose@metaclassical.com>
+pkgname=font-tabula-quattro
+pkgver=2.000
+pkgrel=0
+pkgdesc="Tabula Quattro open source web font family"
+url="https://github.com/inklesspen/tabula-quattro"
+arch="noarch"
+license="OFL-1.1"
+depends="fontconfig"
+options="!check" # no test suite
+source="https://github.com/inklesspen/tabula-quattro/releases/download/v2.000/tabula-quattro-2.000.zip"
+builddir="$srcdir"
+
+package() {
+        install -Dm644 *.ttf -t "$pkgdir"/usr/share/fonts/tabula-quattro
+}
+
+
+
+sha512sums="
+ad757e63ea0117465cc5ffdbe73cfa80b0e8952004619e025e82b23b256792fda669786d801764c551a4b58b8a1147d2d3c28358cfddc31ca6a74dee64ca6024  tabula-quattro-2.000.zip
+"
