@@ -1,0 +1,23 @@
+# Contributor: Rose Davidson <rose@metaclassical.com>
+# Maintainer: Rose Davidson <rose@metaclassical.com>
+pkgname=font-special-elite
+pkgver=1.001
+pkgrel=0
+pkgdesc="A little bit of inked up grunge and a little old school analog flavor"
+url="https://fonts.google.com/specimen/Special+Elite"
+arch="noarch"
+license="Apache-2.0"
+depends="fontconfig"
+options="!check" # no test suite
+source="https://github.com/google/fonts/raw/main/apache/specialelite/SpecialElite-Regular.ttf"
+builddir="$srcdir"
+
+package() {
+        install -Dm644 *.ttf -t "$pkgdir"/usr/share/fonts/special-elite
+}
+
+
+
+sha512sums="
+91acdc223c5b178832bbb4ad6335cfb17aacf2163f6070244a52b5e7537dca26c9d720b9e020c7038054222b0f1a08f1a2e53993736171a1e4194b8b330e608e  SpecialElite-Regular.ttf
+"
