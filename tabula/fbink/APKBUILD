@@ -1,0 +1,64 @@
+# Contributor: Rose Davidson <rose@metaclassical.com>
+# Maintainer: Rose Davidson <rose@metaclassical.com>
+pkgname=fbink
+pkgver=1.23.2
+pkgrel=0
+pkgdesc="FrameBuffer eInker, a small tool & library to print text & images to an eInk Linux framebuffer"
+url="https://github.com/NiLuJe/FBInk"
+arch="all"
+license="GPL-3.0-or-later"
+# depends=""
+makedepends="linux-headers"
+subpackages="$pkgname-dev $pkgname-libs"
+options="!check" # no test suite
+source="$pkgname-$pkgver.tar.gz
+fbink-tabula.patch"
+# builddir="$srcdir/"
+giturl="https://github.com/NiLuJe/FBInk.git"
+
+snapshot() {
+	# check if we setup vars correctly
+	[ -z "$giturl" ] && die "Missding repository url in APKBUILD!"
+	# remove any repositories left in srcdir
+	abuild clean
+	mkdir -p "$srcdir" && cd "$srcdir"
+	# clone git repo and archive
+	local _version=${verbase:-0}_git${_date}
+	command -v git >/dev/null || \
+		die "Missing git! Install git to support git clone."
+	msg "Creating git snapshot: $pkgname-$pkgver"
+	git clone --recurse-submodules --branch v$pkgver $giturl $pkgname-$pkgver || return 1
+	tar czf $startdir/$pkgname-$pkgver.tar.gz  --exclude-vcs $pkgname-$pkgver || return 1
+	cd "$startdir"
+	abuild clean
+}
+
+
+prepare() {
+        default_prepare
+	echo "$pkgver" > $builddir/FBINK_VERSION || return 1
+}
+
+
+build() {
+	cd "$builddir"
+	TABULA=1 make release
+}
+
+
+package() {
+	cd "$builddir"
+	local FBINK_SHARED_NAME_FILE="libfbink.so.1.0.0"
+	local FBINK_SHARED_NAME_VER="libfbink.so.1"
+	local FBINK_SHARED_NAME="libfbink.so"
+	install -D -m 755 Release/fbink "$pkgdir"/usr/bin/fbink
+	install -D -m 755 Release/$FBINK_SHARED_NAME_FILE "$pkgdir"/usr/lib/$FBINK_SHARED_NAME_FILE
+	ln -s $FBINK_SHARED_NAME_FILE "$pkgdir"/usr/lib/$FBINK_SHARED_NAME_VER
+	ln -s $FBINK_SHARED_NAME_FILE "$pkgdir"/usr/lib/$FBINK_SHARED_NAME
+	install -D -m 644 fbink.h "$pkgdir"/usr/include/fbink.h
+}
+
+sha512sums="
+5d7e5aa693221826960062955ee4cfccaa0e9debc3b80ef65587f279843b2c14be6a516e7b99c17da91e8aa6ae778ace154e220243013f6822ba4968832d5030  fbink-1.23.2.tar.gz
+03adbe347db12445caa2b7045eb370237337d5645fc18f0b2107634c3e0dffcd4601b1cd4baf4a9fc4c28040752dcc1193acab5532da9bfe79a2d413ad0b98b5  fbink-tabula.patch
+"

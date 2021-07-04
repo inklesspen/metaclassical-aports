@@ -1,0 +1,96 @@
+--- a/Makefile
++++ b/Makefile
+@@ -225,6 +225,7 @@
+ 
+ # Backward compatibility shenanigan: before FBINK_FOR_KOBO was implemented, we assumed KOBO was the default/fallback platform.
+ # Keep honoring that.
++ifndef TABULA
+ ifndef LINUX
+ ifndef CERVANTES
+ ifndef LEGACY
+@@ -238,8 +239,13 @@
+ endif
+ endif
+ endif
++endif
+ 
+ # Toggle Kindle support
++ifdef TABULA
++	TARGET_CPPFLAGS+=-DFBINK_FOR_KOBO
++endif
++# Toggle Kindle support
+ ifdef KINDLE
+ 	TARGET_CPPFLAGS+=-DFBINK_FOR_KINDLE
+ endif
+@@ -273,35 +279,10 @@
+ 
+ # A version tag...
+ # NOTE: Don't redirect stderr, so we can get an idea of what happened when things go wrong...
+-FBINK_VERSION:=$(shell git describe)
++FBINK_VERSION:=$(file < FBINK_VERSION)
+ # Only use it if we got something useful out of git describe...
+ ifdef FBINK_VERSION
+-	ifdef KINDLE
+-		LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for Kindle"'
+-	else
+-		ifdef CERVANTES
+-			LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for Cervantes"'
+-		else
+-			ifdef LINUX
+-				LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for Linux"'
+-			else
+-				ifdef KOBO
+-					LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for Kobo"'
+-				else
+-					ifdef REMARKABLE
+-						LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for reMarkable"'
+-					else
+-						ifdef POCKETBOOK
+-							LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for PocketBook"'
+-						else
+-							# NOTE: Should never happen!
+-							LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION)"'
+-						endif
+-					endif
+-				endif
+-			endif
+-		endif
+-	endif
++	LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for Tabula"'
+ else
+ 	# Just so we don't use an empty var down the line...
+ 	FBINK_VERSION:=git
+@@ -377,17 +358,22 @@
+ ifdef MINIMAL
+ 	FEATURES_CPPFLAGS+=-DFBINK_MINIMAL
+ else
+-	FEATURES_CPPFLAGS+=-DFBINK_WITH_FONTS
+-	FEATURES_CPPFLAGS+=-DFBINK_WITH_IMAGE
+-	FEATURES_CPPFLAGS+=-DFBINK_WITH_OPENTYPE
+-	# Connect button scanning is Kobo specific
+-	ifdef KOBO
+-		WITH_BUTTON_SCAN:=True
+-		FEATURES_CPPFLAGS+=-DFBINK_WITH_BUTTON_SCAN
+-	endif
+-	# Unifont is *always* optional, because it'll add almost 2MB to the binary size!
+-	ifdef UNIFONT
+-		FEATURES_CPPFLAGS+=-DFBINK_WITH_UNIFONT
++	ifdef TABULA
++		FEATURES_CPPFLAGS+=-DFBINK_MINIMAL
++		FEATURES_CPPFLAGS+=-DFBINK_WITH_IMAGE
++	else
++		FEATURES_CPPFLAGS+=-DFBINK_WITH_FONTS
++		FEATURES_CPPFLAGS+=-DFBINK_WITH_IMAGE
++		FEATURES_CPPFLAGS+=-DFBINK_WITH_OPENTYPE
++		# Connect button scanning is Kobo specific
++		ifdef KOBO
++			WITH_BUTTON_SCAN:=True
++			FEATURES_CPPFLAGS+=-DFBINK_WITH_BUTTON_SCAN
++		endif
++		# Unifont is *always* optional, because it'll add almost 2MB to the binary size!
++		ifdef UNIFONT
++			FEATURES_CPPFLAGS+=-DFBINK_WITH_UNIFONT
++		endif
+ 	endif
+ endif
+ 
