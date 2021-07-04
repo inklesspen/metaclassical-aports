@@ -1,0 +1,23 @@
+# Contributor: Rose Davidson <rose@metaclassical.com>
+# Maintainer: Rose Davidson <rose@metaclassical.com>
+pkgname=font-etbb
+pkgver=1.051
+pkgrel=0
+pkgdesc="An expansion of Edward Tufte’s ET-Bembo family"
+url="https://ctan.org/pkg/etbb"
+arch="noarch"
+license="MIT"
+depends="fontconfig"
+options="!check" # no test suite
+source="ETbb-$pkgver.zip::http://mirrors.ctan.org/install/fonts/etbb.tds.zip"
+builddir="$srcdir/fonts/opentype/public/etbb"
+
+package() {
+        install -Dm644 *.otf -t "$pkgdir"/usr/share/fonts/etbb
+}
+
+
+
+sha512sums="
+d70f1042b75deb5e6f1d909814177c4cf4d028a13aaddafcc23d57890fc874ed0371982691d82b82637e988c4311b665a5f2db6e24a1f3135526b17b93795043  ETbb-1.051.zip
+"
