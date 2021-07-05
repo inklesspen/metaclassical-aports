@@ -1,0 +1,35 @@
+# Maintainer: Elizabeth Jennifer Myers <elizabeth@sporksirc.net>
+# Contributor: Elizabeth Jennifer Myers <elizabeth@sporksirc.net>
+pkgname=py3-greenlet
+pkgver=1.1.0
+pkgrel=0
+pkgdesc="Lightweight in-process concurrent programming"
+url="https://pypi.python.org/pypi/greenlet"
+arch="all"
+license="MIT"
+makedepends="py3-setuptools python3-dev"
+source="https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-$pkgver.tar.gz"
+builddir="$srcdir/greenlet-$pkgver"
+
+replaces="py-greenlet" # Backwards compatibility
+provides="py-greenlet=$pkgver-r$pkgrel" # Backwards compatibility
+
+build() {
+	case "$CARCH" in
+		mips*) ;;
+		*) export CFLAGS="$CFLAGS -O0" CPPFLAGS="$CPPFLAGS -O0" CXXFLAGS="$CXXFLAGS -O0" ;;
+	esac
+	python3 setup.py build
+}
+
+check() {
+	python3 setup.py test
+}
+
+package() {
+	python3 setup.py install --prefix=/usr --root="$pkgdir"
+}
+
+sha512sums="
+13547917860d9a19f2fab519380121805d8f7801ad47b1584003833a5de66eb703373c71e67b32f13b770d429bcee6856b35bc6fc8afb7be598c2bf509bede03  greenlet-1.1.0.tar.gz
+"
