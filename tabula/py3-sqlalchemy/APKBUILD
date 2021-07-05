@@ -2,12 +2,13 @@
 # Maintainer: Drew DeVault <sir@cmpwn.com>
 pkgname=py3-sqlalchemy
 pkgver=1.4.20
-pkgrel=0
+pkgrel=1
 pkgdesc="object relational mapper for Python"
 options="!check" # 2 failed, 8530 passed, 1009 skipped
 url="https://pypi.python.org/pypi/SQLAlchemy"
 arch="all"
 license="MIT"
+depends="python3 py3-greenlet"
 makedepends="python3-dev py3-setuptools"
 checkdepends="
 	py3-pytest py3-mock py3-pytest-xdist
