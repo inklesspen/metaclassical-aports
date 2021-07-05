@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=py3-trio
+pkgver=0.19.0
+pkgrel=0
+pkgdesc="A friendly Python library for async concurrency and I/O"
+url="https://trio.readthedocs.io/"
+arch="noarch"
+license="MIT OR Apache-2.0"
+depends="
+	py3-idna
+	py3-openssl
+	py3-outcome
+	py3-sniffio
+	py3-sortedcontainers
+	python3
+	"
+makedepends="py3-setuptools"
+checkdepends="
+	py3-astor
+	py3-pytest
+	py3-trustme
+	"
+source="https://pypi.python.org/packages/source/t/trio/trio-$pkgver.tar.gz"
+builddir="$srcdir/trio-$pkgver"
+
+case "$CARCH" in
+	ppc64le) options="$options !check" ;; # unix pipes test times out
+esac
+
+build() {
+	python3 setup.py build
+}
+
+check() {
+	# test_fallback_when_no_hook_claims_it fails with pytest >= 6.2
+	# https://github.com/python-trio/trio/issues/1843
+	# https://github.com/python-trio/trio/pull/1824
+	pytest -v -m "not redistributors_should_skip" \
+		--deselect trio/_core/tests/test_asyncgen.py::test_fallback_when_no_hook_claims_it
+}
+
+package() {
+	python3 setup.py install --prefix=/usr --root="$pkgdir"
+}
+
+sha512sums="
+e517d19beca7607128ef066ca8ab6ff9b0934a6a35210507f4fc1907941da98a86abf1a3c23711dc9a9d86be4d5a2f648f99b6c2913cbf8665aeae7ecdfea947  trio-0.19.0.tar.gz
+"
