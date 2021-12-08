@@ -1,7 +1,7 @@
 # Contributor: Rose Davidson <rose@metaclassical.com>
 # Maintainer: Rose Davidson <rose@metaclassical.com>
 pkgname=fbink
-pkgver=1.23.2
+pkgver=1.24.0
 pkgrel=0
 pkgdesc="FrameBuffer eInker, a small tool & library to print text & images to an eInk Linux framebuffer"
 url="https://github.com/NiLuJe/FBInk"
@@ -11,43 +11,17 @@ license="GPL-3.0-or-later"
 makedepends="linux-headers"
 subpackages="$pkgname-dev $pkgname-libs"
 options="!check" # no test suite
-source="$pkgname-$pkgver.tar.gz
+source="https://github.com/NiLuJe/FBInk/releases/download/v1.24.0/FBInk-v$pkgver.tar.xz
 fbink-tabula.patch"
-# builddir="$srcdir/"
-giturl="https://github.com/NiLuJe/FBInk.git"
-
-snapshot() {
-	# check if we setup vars correctly
-	[ -z "$giturl" ] && die "Missding repository url in APKBUILD!"
-	# remove any repositories left in srcdir
-	abuild clean
-	mkdir -p "$srcdir" && cd "$srcdir"
-	# clone git repo and archive
-	local _version=${verbase:-0}_git${_date}
-	command -v git >/dev/null || \
-		die "Missing git! Install git to support git clone."
-	msg "Creating git snapshot: $pkgname-$pkgver"
-	git clone --recurse-submodules --branch v$pkgver $giturl $pkgname-$pkgver || return 1
-	tar czf $startdir/$pkgname-$pkgver.tar.gz  --exclude-vcs $pkgname-$pkgver || return 1
-	cd "$startdir"
-	abuild clean
-}
-
-
-prepare() {
-        default_prepare
-	echo "$pkgver" > $builddir/FBINK_VERSION || return 1
-}
+builddir="$srcdir"/FBInk-v$pkgver
 
 
 build() {
-	cd "$builddir"
 	TABULA=1 make release
 }
 
 
 package() {
-	cd "$builddir"
 	local FBINK_SHARED_NAME_FILE="libfbink.so.1.0.0"
 	local FBINK_SHARED_NAME_VER="libfbink.so.1"
 	local FBINK_SHARED_NAME="libfbink.so"
@@ -59,6 +33,6 @@ package() {
 }
 
 sha512sums="
-5d7e5aa693221826960062955ee4cfccaa0e9debc3b80ef65587f279843b2c14be6a516e7b99c17da91e8aa6ae778ace154e220243013f6822ba4968832d5030  fbink-1.23.2.tar.gz
-03adbe347db12445caa2b7045eb370237337d5645fc18f0b2107634c3e0dffcd4601b1cd4baf4a9fc4c28040752dcc1193acab5532da9bfe79a2d413ad0b98b5  fbink-tabula.patch
+e0c964e9e1923927ba126dbe08faae0142d43a0d6f5cd2551ebc939b4b739d2c5133c24208a3954baf4c6af9fcea444ef3416f3b552fc791576127a27e50acbb  FBInk-v1.24.0.tar.xz
+01d0e2eabd0f852dc1ec454f4500c8564afb1bc5cda3a3b602dec5f3af9b39e5db01d240cb8cc7fcbf2e27d12b1006184f11d25c5cd5fe3782476030ba56ed9c  fbink-tabula.patch
 "

@@ -1,34 +1,66 @@
---- a/Makefile
-+++ b/Makefile
-@@ -225,6 +225,7 @@
+diff -Nurp a/Makefile b/Makefile
+--- a/Makefile	2021-08-29 16:05:49.000000000 -0400
++++ b/Makefile	2021-12-08 13:12:35.000000000 -0500
+@@ -247,85 +247,22 @@ EXTRA_CPPFLAGS+=-D_REENTRANT=1
+ # We're Linux-bound anyway...
+ EXTRA_CPPFLAGS+=-D_GNU_SOURCE
  
- # Backward compatibility shenanigan: before FBINK_FOR_KOBO was implemented, we assumed KOBO was the default/fallback platform.
- # Keep honoring that.
-+ifndef TABULA
- ifndef LINUX
- ifndef CERVANTES
- ifndef LEGACY
-@@ -238,8 +239,13 @@
- endif
- endif
- endif
-+endif
+-# Backward compatibility shenanigan: before FBINK_FOR_KOBO was implemented, we assumed KOBO was the default/fallback platform.
+-# Keep honoring that.
+-ifndef LINUX
+-ifndef CERVANTES
+-ifndef LEGACY
+-ifndef KINDLE
+-ifndef REMARKABLE
+-ifndef POCKETBOOK
+-	KOBO=true
+-endif
+-endif
+-endif
+-endif
+-endif
+-endif
++TABULA=true
  
- # Toggle Kindle support
+-# Toggle Kindle support
+-ifdef KINDLE
+-	TARGET_CPPFLAGS+=-DFBINK_FOR_KINDLE
+-endif
+-# Toggle Legacy Kindle support
+-ifdef LEGACY
+-	TARGET_CPPFLAGS+=-DFBINK_FOR_LEGACY
+-endif
+-# Toggle Bq Cervantes support
+-ifdef CERVANTES
+-	TARGET_CPPFLAGS+=-DFBINK_FOR_CERVANTES
+-endif
+-# Toggle generic Linux support
+-ifdef LINUX
+-	TARGET_CPPFLAGS+=-DFBINK_FOR_LINUX
+-endif
+-# Toggle Kobo support
+-ifdef KOBO
++
 +ifdef TABULA
-+	TARGET_CPPFLAGS+=-DFBINK_FOR_KOBO
-+endif
-+# Toggle Kindle support
- ifdef KINDLE
- 	TARGET_CPPFLAGS+=-DFBINK_FOR_KINDLE
+ 	TARGET_CPPFLAGS+=-DFBINK_FOR_KOBO
  endif
-@@ -273,35 +279,10 @@
+-# Toggle reMarkable support
+-ifdef REMARKABLE
+-	TARGET_CPPFLAGS+=-DFBINK_FOR_REMARKABLE
+-endif
+-# Toggle PocketBook support
+-ifdef POCKETBOOK
+-	TARGET_CPPFLAGS+=-DFBINK_FOR_POCKETBOOK
+-endif
+ 
+ # And that should definitely be honored by everything, so, add it to EXTRA_CPPFLAGS
+ EXTRA_CPPFLAGS+=$(TARGET_CPPFLAGS)
  
  # A version tag...
  # NOTE: Don't redirect stderr, so we can get an idea of what happened when things go wrong...
--FBINK_VERSION:=$(shell git describe)
-+FBINK_VERSION:=$(file < FBINK_VERSION)
- # Only use it if we got something useful out of git describe...
+-FBINK_VERSION:=$(shell git describe || cat VERSION)
++FBINK_VERSION:=$(file < VERSION)
+ # Only use it if we got something useful...
  ifdef FBINK_VERSION
 -	ifdef KINDLE
 -		LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for Kindle"'
@@ -59,38 +91,28 @@
 +	LIB_CFLAGS+=-DFBINK_VERSION='"$(FBINK_VERSION) for Tabula"'
  else
  	# Just so we don't use an empty var down the line...
- 	FBINK_VERSION:=git
-@@ -377,17 +358,22 @@
- ifdef MINIMAL
- 	FEATURES_CPPFLAGS+=-DFBINK_MINIMAL
- else
--	FEATURES_CPPFLAGS+=-DFBINK_WITH_FONTS
--	FEATURES_CPPFLAGS+=-DFBINK_WITH_IMAGE
--	FEATURES_CPPFLAGS+=-DFBINK_WITH_OPENTYPE
--	# Connect button scanning is Kobo specific
--	ifdef KOBO
--		WITH_BUTTON_SCAN:=True
--		FEATURES_CPPFLAGS+=-DFBINK_WITH_BUTTON_SCAN
--	endif
--	# Unifont is *always* optional, because it'll add almost 2MB to the binary size!
--	ifdef UNIFONT
--		FEATURES_CPPFLAGS+=-DFBINK_WITH_UNIFONT
-+	ifdef TABULA
-+		FEATURES_CPPFLAGS+=-DFBINK_MINIMAL
-+		FEATURES_CPPFLAGS+=-DFBINK_WITH_IMAGE
-+	else
-+		FEATURES_CPPFLAGS+=-DFBINK_WITH_FONTS
-+		FEATURES_CPPFLAGS+=-DFBINK_WITH_IMAGE
-+		FEATURES_CPPFLAGS+=-DFBINK_WITH_OPENTYPE
-+		# Connect button scanning is Kobo specific
-+		ifdef KOBO
-+			WITH_BUTTON_SCAN:=True
-+			FEATURES_CPPFLAGS+=-DFBINK_WITH_BUTTON_SCAN
-+		endif
-+		# Unifont is *always* optional, because it'll add almost 2MB to the binary size!
-+		ifdef UNIFONT
-+			FEATURES_CPPFLAGS+=-DFBINK_WITH_UNIFONT
-+		endif
- 	endif
+ 	FBINK_VERSION:=dev
+@@ -354,7 +291,7 @@ ifdef UNIBREAK
  endif
  
+ # Same for libi2c, on Kobo
+-ifdef KOBO
++ifdef TABULA
+ 	EXTRA_CPPFLAGS+=-Ilibi2c-staged/include
+ 	EXTRA_LDFLAGS+=-Llibi2c-staged/lib
+ 	I2C_LIBS:=-l:libi2c.a
+@@ -415,6 +352,14 @@ endif
+ 
+ CMD_SRCS:=fbink_cmd.c
+ BTN_SRCS:=button_scan_cmd.c
++
++ifdef TABULA
++	MINIMAL=true
++	IMAGE=true
++# required to build fbink_cmd
++	BITMAP=true
++endif
++
+ # Unless we're asking for a minimal build, include the other features, except for Unifont.
+ ifdef MINIMAL
+ 	FEATURES_CPPFLAGS+=-DFBINK_MINIMAL
