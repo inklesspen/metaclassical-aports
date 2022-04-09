@@ -4,7 +4,7 @@
 pkgname=py3-trio-typing
 #_pkgreal is used by apkbuild-pypi to find modules at PyPI
 _pkgreal=trio-typing
-pkgver=0.5.0
+pkgver=0.7.0
 pkgrel=0
 pkgdesc="Static type checking support for Trio and related projects"
 url="http://pypi.org/pypi/trio-typing"
@@ -13,7 +13,7 @@ license="MIT -or- Apache License 2.0"
 options="!check" # some issue with test suite, not sure exactly
 depends="python3 py3-trio py3-mypy py3-mypy-extensions py3-typing-extensions"
 makedepends="py3-setuptools"
-source="https://files.pythonhosted.org/packages/e6/4f/84cbd1fa08cf0784c0b0c413e3ad421c90679396358637f866a4c36c80e1/trio-typing-0.5.0.tar.gz"
+source="https://pypi.python.org/packages/source/t/trio-typing/trio-typing-$pkgver.tar.gz"
 builddir="$srcdir/$_pkgreal-$pkgver"
 
 build() {
@@ -29,5 +29,5 @@ package() {
 }
 
 sha512sums="
-4f908b9da5e0fe6947d4909b4236a9df0e39d2924e603b5147074b21f194e9daa8749683155cc0f7978ee160db4961066cee462dde1566b732d09cce7b311b7d  trio-typing-0.5.0.tar.gz
+02235b7aa3139ecf8899c5ea298bd6b5e82c8e2256df9bb3afe7cb31e04ab721ef16fc8d08cd0877e9db2d05238a77ce6b15f4a1f18ae2f8bebd699b043d309d  trio-typing-0.7.0.tar.gz
 "
