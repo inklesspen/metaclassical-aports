@@ -1,0 +1,29 @@
+# Contributor: Rose Davidson <rose@metaclassical.com>
+# Maintainer: Rose Davidson <rose@metaclassical.com>
+pkgname=font-atkinson-hyperlegible
+pkgver=1.02
+# The source archive contains a date-based version; the pkgver is obtained from the actual otf files.
+_zipver=2020-0514
+pkgrel=0
+pkgdesc="A new typeface – greater legibility and readability for low vision readers"
+url="https://www.brailleinstitute.org/freefont"
+arch="noarch"
+license="custom"
+subpackages="$pkgname-doc"
+depends="fontconfig"
+options="!check" # no test suite
+source="https://www.brailleinstitute.org/wp-content/uploads/atkinson-hyperlegible-font/Atkinson-Hyperlegible-Font-Print-and-Web-${_zipver}.zip
+        https://www.brailleinstitute.org/wp-content/uploads/2020/11/Atkinson-Hyperlegible-Font-License-2020-1104.pdf"
+builddir="$srcdir"
+
+package() {
+        install -Dm644 Atkinson-Hyperlegible-Font-Print-and-Web-${_zipver}/Print\ Fonts/*.otf -t "$pkgdir"/usr/share/fonts/atkinson-hyperlegible
+	install -Dm644 Atkinson-Hyperlegible-Font-License-2020-1104.pdf "$pkgdir"/usr/share/licenses/$pkgname/Atkinson-Hyperlegible-Font-License-2020-1104.pdf
+}
+
+
+
+sha512sums="
+869e4a477caac906731494daa6db216f621fd75231aeb94053a412ff1c3752726c873895a785b138d3a74dc721a06925b791ccf1a3cdaddd52edc99c4188a0bd  Atkinson-Hyperlegible-Font-Print-and-Web-2020-0514.zip
+2d81fa4e4ac09490e9d9f8d8b8922a8ffc8d2568994147dfea713259f210e90883c0353f13be05d0e979ca99313b136a1021199adec863cf9012a52928403f54  Atkinson-Hyperlegible-Font-License-2020-1104.pdf
+"
