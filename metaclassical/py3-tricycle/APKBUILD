@@ -13,7 +13,7 @@ license="MIT -or- Apache License 2.0"
 depends="python3 py3-trio py3-trio-typing"
 checkdepends="python3-dev py3-pytest py3-pytest-trio"
 makedepends="py3-setuptools"
-source="https://files.pythonhosted.org/packages/68/e8/ffb6495047ba66c7a2bac90042d346010c633b2054ef4d0d14584b9c41a6/tricycle-0.2.1.tar.gz"
+source="https://pypi.python.org/packages/source/t/tricycle/tricycle-$pkgver.tar.gz"
 builddir="$srcdir/$_pkgreal-$pkgver"
 
 build() {
