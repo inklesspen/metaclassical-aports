@@ -1,7 +1,7 @@
 # Contributor: Drew DeVault <sir@cmpwn.com>
 # Maintainer: Drew DeVault <sir@cmpwn.com>
 pkgname=py3-sqlalchemy
-pkgver=1.4.35
+pkgver=1.4.43
 pkgrel=0
 pkgdesc="object relational mapper for Python"
 options="!check" # 2 failed, 8530 passed, 1009 skipped
@@ -32,5 +32,5 @@ package() {
 }
 
 sha512sums="
-195ab35934bca36e7c4c2127f153eff31775f7f150163912f79143efae63911eded67d8645e08ede2c533c675d18c3c5796235e0c0f6d1e6ebb97664ac13f171  SQLAlchemy-1.4.35.tar.gz
+ee26578874617d46bee8c45e5358e966dafe76d11ff3773a0ce058cfdc180642c87ead782b64e0709aa6af2f92fbcb8a4df3d5e5ce69c9ee3ed4a8583be3b802  SQLAlchemy-1.4.43.tar.gz
 "
