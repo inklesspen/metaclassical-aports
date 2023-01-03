@@ -1,7 +1,7 @@
 # Contributor: Rose Davidson <rose@metaclassical.com>
 # Maintainer: Rose Davidson <rose@metaclassical.com>
 pkgname=fbink
-pkgver=1.24.0
+pkgver=1.25.0
 pkgrel=0
 pkgdesc="FrameBuffer eInker, a small tool & library to print text & images to an eInk Linux framebuffer"
 url="https://github.com/NiLuJe/FBInk"
@@ -11,7 +11,7 @@ license="GPL-3.0-or-later"
 makedepends="linux-headers"
 subpackages="$pkgname-dev $pkgname-libs"
 options="!check" # no test suite
-source="https://github.com/NiLuJe/FBInk/releases/download/v1.24.0/FBInk-v$pkgver.tar.xz
+source="https://github.com/NiLuJe/FBInk/releases/download/v$pkgver/FBInk-v$pkgver.tar.xz
 fbink-tabula.patch"
 builddir="$srcdir"/FBInk-v$pkgver
 
@@ -33,6 +33,6 @@ package() {
 }
 
 sha512sums="
-e0c964e9e1923927ba126dbe08faae0142d43a0d6f5cd2551ebc939b4b739d2c5133c24208a3954baf4c6af9fcea444ef3416f3b552fc791576127a27e50acbb  FBInk-v1.24.0.tar.xz
+e3227bc0e0393bfe531da81edbe3008a8d100ce00c7d95ec7f1f23e9ecfe218e0005362c2ae5aed2462db142c92f8985f7699816e6af94dc587a6d83506684b3  FBInk-v1.25.0.tar.xz
 01d0e2eabd0f852dc1ec454f4500c8564afb1bc5cda3a3b602dec5f3af9b39e5db01d240cb8cc7fcbf2e27d12b1006184f11d25c5cd5fe3782476030ba56ed9c  fbink-tabula.patch
 "
