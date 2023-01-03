@@ -1,16 +1,20 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=py3-trio
-pkgver=0.20.0
+pkgver=0.22.0
 pkgrel=0
 pkgdesc="A friendly Python library for async concurrency and I/O"
 url="https://trio.readthedocs.io/"
 arch="noarch"
 license="MIT OR Apache-2.0"
 depends="
+	py3-attrs
+	py3-async_generator
 	py3-idna
+	py3-cffi
 	py3-openssl
 	py3-outcome
+	py3-exceptiongroup
 	py3-sniffio
 	py3-sortedcontainers
 	python3
@@ -33,11 +37,7 @@ build() {
 }
 
 check() {
-	# test_fallback_when_no_hook_claims_it fails with pytest >= 6.2
-	# https://github.com/python-trio/trio/issues/1843
-	# https://github.com/python-trio/trio/pull/1824
-	pytest -v -m "not redistributors_should_skip" \
-		--deselect trio/_core/tests/test_asyncgen.py::test_fallback_when_no_hook_claims_it
+	pytest -v -m "not redistributors_should_skip"
 }
 
 package() {
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-892604fb74298e8454c4863ff54a2a05775d11c88cb26fa9188a1727c8bd2847c1a4a4a497d9b2045b26a1f886eb08aeec17a7047769f8b21796549405206dd7  trio-0.20.0.tar.gz
+c0952aeeeb4a635fc1e34052060cfb59fa2339687fe3bfe131eec9c72ca6da1b206eebd36d8a91c5df8a6951e075c5781e55565f4a9a18944b02727a57d9c222  trio-0.22.0.tar.gz
 "
